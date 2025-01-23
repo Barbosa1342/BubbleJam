@@ -54,4 +54,8 @@ public class HorizontalMove : MonoBehaviour
         Vector2 movement = new(moveSpeed * horizontalMove, rb.linearVelocity.y);
         rb.linearVelocity = movement;
     }
+
+    public bool IsFacedRight(){
+        return !sprite.flipX;
+    }
 }
