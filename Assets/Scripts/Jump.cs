@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Jump : MonoBehaviour
 {
+    InputAction jumpAction;
     private Rigidbody2D rb;
     [SerializeField] float buttonTime = 0.3f;
     [SerializeField] float cancelRate = 80f;
@@ -19,6 +21,10 @@ public class Jump : MonoBehaviour
     public float gravityScaleUp = 1f;
     public float gravityScaleDown = 2f;
 
+    private void Start() {
+        jumpAction = InputSystem.actions.FindAction("Jump");
+    }
+
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
         //playerAnimator = GetComponent<Animator>();
@@ -27,7 +33,7 @@ public class Jump : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bool jump = Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W);
+        bool jump = jumpAction.IsPressed();
 
         if (IsGrounded()){
             //playerAnimator.SetBool("isJumping", false);
@@ -41,7 +47,7 @@ public class Jump : MonoBehaviour
         if (isJumping){
             jumpTime += Time.deltaTime;
 
-            if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.W))
+            if (!jump)
             {
                 jumpCancelled = true;
             }
