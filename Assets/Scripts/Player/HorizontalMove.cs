@@ -22,11 +22,13 @@ public class HorizontalMove : MonoBehaviour
     private GameObject standCollider;
     private GameObject crouchCollider;
     private Jump jumpScript;
+    private Knockback knockbackScript;
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
         //playerAnimator = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
+        knockbackScript = GetComponent<Knockback>();
     }
 
     private void Start() {
@@ -84,14 +86,16 @@ public class HorizontalMove : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        float moveSpeed = Mathf.Lerp(speed, speed*runRate, timer/timeToRun);
+        if(!knockbackScript.OnKnockback){
+            float moveSpeed = Mathf.Lerp(speed, speed*runRate, timer/timeToRun);
 
-        if (isCrouching){
-            moveSpeed *= 0.5f;
+            if (isCrouching){
+                moveSpeed *= 0.5f;
+            }
+
+            Vector2 movement = new(moveSpeed * horizontalMove, rb.linearVelocity.y);
+            rb.linearVelocity = movement;
         }
-
-        Vector2 movement = new(moveSpeed * horizontalMove, rb.linearVelocity.y);
-        rb.linearVelocity = movement;
     }
 
     public void SetCrouching(bool crouch)

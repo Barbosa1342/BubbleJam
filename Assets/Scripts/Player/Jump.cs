@@ -78,7 +78,7 @@ public class Jump : MonoBehaviour
 
     private void PerformJump()
     {
-        float jumpForce = Mathf.Sqrt(jumpHeight * -2f * (Physics2D.gravity.y * rb.gravityScale));
+        float jumpForce = Mathf.Sqrt(jumpHeight * -2f * Physics2D.gravity.y);
         rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
 
         isJumping = true;
