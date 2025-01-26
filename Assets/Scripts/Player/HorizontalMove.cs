@@ -18,7 +18,7 @@ public class HorizontalMove : MonoBehaviour
 
     private Rigidbody2D rb;
     private SpriteRenderer sprite;
-    //private Animator playerAnimator;
+    private Animator playerAnimator;
     private GameObject standCollider;
     private GameObject crouchCollider;
     private Jump jumpScript;
@@ -26,7 +26,7 @@ public class HorizontalMove : MonoBehaviour
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
-        //playerAnimator = GetComponent<Animator>();
+        playerAnimator = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
         knockbackScript = GetComponent<Knockback>();
     }
@@ -57,7 +57,7 @@ public class HorizontalMove : MonoBehaviour
 
             if (horizontalMove != 0){
                 //isWalking = true;
-                //playerAnimator.SetBool("isWalking", true);
+                playerAnimator.SetBool("isWalking", true);
         
                 if (horizontalMove > 0){
                     sprite.flipX = false;
@@ -71,7 +71,7 @@ public class HorizontalMove : MonoBehaviour
             else{
                 timer = 0f;
                 //isWalking = false;
-                //playerAnimator.SetBool("isWalking", false);
+                playerAnimator.SetBool("isWalking", false);
             }
 
             if(crouchMove < 0 && jumpScript.IsGrounded()){
@@ -80,6 +80,7 @@ public class HorizontalMove : MonoBehaviour
                 SetCrouching(false);
             }
         }else{
+            playerAnimator.SetBool("isWalking", false);
             horizontalMove = 0;
             crouchMove = 0;
         }
@@ -102,6 +103,7 @@ public class HorizontalMove : MonoBehaviour
     {
         isCrouching = crouch;
 
+        playerAnimator.SetBool("isCrouching", crouch);
         crouchCollider.SetActive(crouch);
         standCollider.SetActive(!crouch);
     }

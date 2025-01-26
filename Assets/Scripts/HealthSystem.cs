@@ -33,8 +33,9 @@ public class HealthSystem : MonoBehaviour
         }
 
         if(currentHealthPoints <= 0){
-            Debug.Log("morreu");
-            // Morre
+            if(!gameObject.CompareTag("Player")){
+                gameObject.SetActive(false);
+            }
         }
     }
 

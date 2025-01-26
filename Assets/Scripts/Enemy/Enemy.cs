@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] protected Transform player;
     protected Rigidbody2D rb;
-
+    protected Animator rabbitAnimator;
 
     protected SpriteRenderer sprite;
 
@@ -22,6 +22,7 @@ public class Enemy : MonoBehaviour
     }
 
     protected void Start() {
+        rabbitAnimator = GetComponent<Animator>();
         knockbackScript = GetComponent<Knockback>();
         patrolling = false;
     }
@@ -34,9 +35,9 @@ public class Enemy : MonoBehaviour
         rb.linearVelocity = walkSpeed * direction;
 
         if (rb.linearVelocityX >= 0.01f){
-            sprite.flipX = false;
-        }else if (rb.linearVelocityX <= -0.01f){
             sprite.flipX = true;
+        }else if (rb.linearVelocityX <= -0.01f){
+            sprite.flipX = false;
         }
     }
 
@@ -61,12 +62,12 @@ public class Enemy : MonoBehaviour
         Vector2 direction;
         if (random == 0){
             direction = Vector2.left;
-            sprite.flipX = true;
+            sprite.flipX = false;
         }else if(random == 1){
             direction = Vector2.right;
-            sprite.flipX = false;
+            sprite.flipX = true;
         }else{
-            // stay still
+            rabbitAnimator.SetBool("isPatrolling", false);
             direction = Vector2.zero;
         }
 
@@ -75,6 +76,7 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         StopWalking();
+        rabbitAnimator.SetBool("isPatrolling", false);
 
         yield return new WaitForSeconds(1f);
 

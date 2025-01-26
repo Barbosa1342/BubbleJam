@@ -13,7 +13,9 @@ public class Knockback : MonoBehaviour
     }
 
     public void ApplyKnockback(Vector3 enemyPosition, float knockbackForce){
-        StartCoroutine(CoroutineKnockback(enemyPosition, knockbackForce));
+        if(gameObject.activeSelf){
+            StartCoroutine(CoroutineKnockback(enemyPosition, knockbackForce));
+        }
     }
 
     private IEnumerator CoroutineKnockback(Vector3 enemyPosition, float knockbackForce){

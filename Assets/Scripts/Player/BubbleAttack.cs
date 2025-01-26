@@ -10,10 +10,14 @@ public class BubbleAttack : MonoBehaviour
     private HorizontalMove horizontalMove;
     InputAction attackAction;
 
+    private Animator playerAnimator;
+
+
     private void Start() {
         attackAction = InputSystem.actions.FindAction("Attack");
         canShoot = true;
         horizontalMove = GetComponent<HorizontalMove>();
+        playerAnimator = GetComponent<Animator>();
     }
 
     private void Update() {
@@ -25,7 +29,7 @@ public class BubbleAttack : MonoBehaviour
     {
         Vector2 direcao;
         canShoot = false;
-        //anim.SetBool("atirando", true);
+        playerAnimator.SetBool("isAttacking", true);
 
         if (horizontalMove.IsFacedRight()){
             direcao = Vector2.right;
@@ -33,16 +37,17 @@ public class BubbleAttack : MonoBehaviour
             direcao = Vector2.left;
         };
 
-
         direcao.y = 0;
         direcao = direcao.normalized;
+
+        yield return new WaitForSeconds(0.2f);
 
         Transform bala = Instantiate(soapBubblePrefab, transform.position, transform.rotation);
         bala.GetComponent<Rigidbody2D>().AddForce(direcao*bubbleSpeed, ForceMode2D.Impulse);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.4f);
 
         canShoot = true;
-        //anim.SetBool("atirando", false);
+        playerAnimator.SetBool("isAttacking", false);
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,11 +11,12 @@ public class Jump : MonoBehaviour
     private float jumpTime;
     private bool isJumping;
     private bool jumpCancelled;
+    private bool canJump;
     [SerializeField] float jumpHeight = 3f;
     [SerializeField] Transform groundCheck;
     [SerializeField] LayerMask groundLayer;
 
-    //private Animator playerAnimator;
+    private Animator playerAnimator;
 
     // changing the gravity on jumping
     // create a dinamic movement
@@ -23,11 +25,12 @@ public class Jump : MonoBehaviour
 
     private void Start() {
         jumpAction = InputSystem.actions.FindAction("Jump");
+        canJump = true;
     }
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
-        //playerAnimator = GetComponent<Animator>();
+        playerAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -36,12 +39,13 @@ public class Jump : MonoBehaviour
         bool jump = jumpAction.IsPressed();
 
         if (IsGrounded()){
-            //playerAnimator.SetBool("isJumping", false);
+            playerAnimator.SetBool("isJumping", false);
 
-            if(jump && !isJumping){
-                //playerAnimator.SetBool("isJumping", true);
+            if(jump && !isJumping && canJump){
                 PerformJump();
             }
+        }else{
+            playerAnimator.SetBool("isJumping", true);
         }
 
         if (isJumping){
@@ -54,6 +58,7 @@ public class Jump : MonoBehaviour
             if (jumpTime > buttonTime)
             {
                 isJumping = false;
+                StartCoroutine(CanJump());
             }
         }
 
@@ -98,5 +103,11 @@ public class Jump : MonoBehaviour
             }
         }
         return false;
+    }
+
+    private IEnumerator CanJump(){
+        canJump = false;
+        yield return new WaitForSeconds(0.3f);
+        canJump = true;
     }
 }
